@@ -1,10 +1,15 @@
 "use client";
 
-import { motion, useMotionValue, useSpring } from "framer-motion";
-import { type ButtonHTMLAttributes, type ReactNode, useEffect, useRef } from "react";
+import { motion, useMotionValue, useSpring, type HTMLMotionProps } from "framer-motion";
+import { type ReactNode, useEffect, useRef } from "react";
 import { useMousePosition } from "@/hooks/useMousePosition";
 
-type MagneticButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+type SafeMotionButtonProps = Omit<
+  HTMLMotionProps<"button">,
+  "children" | "onAnimationStart"
+>;
+
+type MagneticButtonExplicitProps = SafeMotionButtonProps & {
   children: ReactNode;
   magneticRadius?: number;
   magneticStrength?: number;
@@ -16,7 +21,7 @@ export default function MagneticButton({
   magneticRadius = 140,
   magneticStrength = 0.22,
   ...props
-}: MagneticButtonProps) {
+}: MagneticButtonExplicitProps) {
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);

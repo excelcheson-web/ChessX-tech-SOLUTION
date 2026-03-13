@@ -4,6 +4,7 @@
 
 [build.environment]
   NODE_VERSION = "20"
+  CI = "false"
 
 # @netlify/plugin-nextjs handles App Router, SSR, ISR, and image optimisation
 [[plugins]]

@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const accessKey = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY ?? "";
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -49,7 +50,7 @@ export default function ContactPage() {
                 </p>
 
                 <form onSubmit={handleSubmit} className="mt-8 space-y-4 sm:space-y-5">
-                  <input type="hidden" name="access_key" value="ae02cda6-4cdc-443a-a6b0-78ce4c17f0e0" />
+                  <input type="hidden" name="access_key" value={accessKey} />
 
                   <div className="grid gap-4 sm:grid-cols-2">
                     <label className="block">
