@@ -1,23 +1,30 @@
+"use client";
+
+import { useState } from "react";
+import { BriefcaseBusiness, Cpu, FolderKanban, Home, Info, Menu, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import MagneticWrapper from "./MagneticWrapper";
 
 const navigationItems = [
-  { href: "/", label: "Home" },
-  { href: "/services", label: "Services" },
-  { href: "/portfolio", label: "Portfolio" },
-  { href: "/labs", label: "Labs (Tech Specs)" },
-  { href: "/about", label: "About" },
+  { href: "/", label: "Home", icon: Home },
+  { href: "/services", label: "Services", icon: BriefcaseBusiness },
+  { href: "/portfolio", label: "Portfolio", icon: FolderKanban },
+  { href: "/labs", label: "Labs (Tech Specs)", icon: Cpu },
+  { href: "/about", label: "About", icon: Info },
 ];
 
 export default function Header() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   return (
     <header className="fixed inset-x-0 top-0 z-50 px-3 py-3 sm:px-6">
-      <nav className="mx-auto flex w-full max-w-7xl flex-col gap-2 rounded-2xl border border-white/10 bg-white/10 px-3 py-3 backdrop-blur-xl shadow-[0_16px_50px_rgba(2,6,23,0.45)] sm:px-5">
-        <div className="flex items-center justify-between gap-3">
+      <nav className="mx-auto flex w-full max-w-7xl items-center justify-between rounded-2xl border border-white/10 bg-white/10 px-3 py-3 backdrop-blur-xl shadow-[0_16px_50px_rgba(2,6,23,0.45)] sm:px-5">
+        <div className="flex min-w-0 items-center">
           <Link
             href="/"
-            className="flex max-w-[76vw] items-center gap-2.5 truncate sm:gap-3"
+            className="flex max-w-[66vw] items-center gap-2.5 truncate sm:max-w-none sm:gap-3"
+            onClick={() => setMobileMenuOpen(false)}
           >
             <Image
               src="/chessx-logo.png"
@@ -31,20 +38,31 @@ export default function Header() {
               ChessX Tech Solution
             </span>
           </Link>
-
-          <div className="lg:hidden">
-            <MagneticWrapper>
-              <Link
-                href="/contact"
-                className="rounded-lg border border-white/10 bg-white/10 px-3 py-2 text-xs font-medium text-white/90 backdrop-blur-xl sm:text-sm"
-              >
-                Contact Us
-              </Link>
-            </MagneticWrapper>
-          </div>
         </div>
 
-        <div className="hidden items-center gap-3 lg:flex">
+        <div className="flex items-center gap-2 md:hidden">
+          <MagneticWrapper>
+            <Link
+              href="/contact"
+              className="rounded-lg border border-white/10 bg-white/10 px-3 py-2 text-xs font-medium text-white/90 backdrop-blur-xl"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Contact
+            </Link>
+          </MagneticWrapper>
+
+          <button
+            type="button"
+            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileMenuOpen}
+            onClick={() => setMobileMenuOpen((current) => !current)}
+            className="inline-flex items-center justify-center rounded-lg border border-white/10 bg-white/10 p-2 text-white/90 backdrop-blur-xl transition-colors hover:bg-white/20"
+          >
+            {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
+        </div>
+
+        <div className="hidden items-center gap-3 md:flex">
           <ul className="flex items-center gap-1">
             {navigationItems.map((item) => (
               <li key={item.href}>
@@ -66,19 +84,29 @@ export default function Header() {
             </Link>
           </MagneticWrapper>
         </div>
-
-        <div className="-mx-1 flex gap-1 overflow-x-auto pb-1 pr-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden lg:hidden">
-          {navigationItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="shrink-0 rounded-lg border border-white/10 bg-white/10 px-3 py-2 text-xs text-slate-100/90 backdrop-blur-xl sm:text-sm"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </div>
       </nav>
+
+      {mobileMenuOpen ? (
+        <div className="mx-auto mt-2 w-full max-w-7xl md:hidden">
+          <div className="rounded-2xl border border-white/10 bg-white/10 p-3 backdrop-blur-xl shadow-[0_16px_50px_rgba(2,6,23,0.45)]">
+            <div className="grid grid-cols-3 gap-2">
+              {navigationItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  aria-label={item.label}
+                  title={item.label}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="inline-flex items-center justify-center rounded-lg border border-white/10 bg-white/5 p-2.5 text-slate-100/90 transition-colors hover:bg-white/15"
+                >
+                  <item.icon size={16} />
+                  <span className="sr-only">{item.label}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      ) : null}
     </header>
   );
 }
